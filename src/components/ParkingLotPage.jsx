@@ -4,6 +4,7 @@ import { initialState, parkingLotReducer } from "../context/parkingLotReducer";
 import { getParkingLots } from "../api/todo";
 import { ParkingLotsActionTypes } from "../enums/ParkingLotsActionTypes";
 import { ParkingLotContext } from "../context/ParkingLotContext";
+import ParkingLots from "./ParkingLots";
 
 function ParkingLotPage() {
     const [state, dispatch] = useReducer(parkingLotReducer, initialState);
@@ -20,6 +21,7 @@ function ParkingLotPage() {
     return (
         <ParkingLotContext.Provider value={{ state, dispatch }}>
             <FetchAndParkComponent />
+            <ParkingLots />
         </ParkingLotContext.Provider>
     );
 }

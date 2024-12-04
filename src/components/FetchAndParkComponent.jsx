@@ -31,7 +31,6 @@ const FetchAndParkComponent = () => {
             }}
         >
             <Grid
-                item
                 size={6}
                 sx={{
                     display: "flex",
@@ -49,7 +48,6 @@ const FetchAndParkComponent = () => {
                     }}
                 >
                     <Grid
-                        item
                         size={2}
                         sx={{
                             paddingRight: "10px",
@@ -60,7 +58,6 @@ const FetchAndParkComponent = () => {
                         <Typography>Plate Number</Typography>
                     </Grid>
                     <Grid
-                        item
                         size={10}
                         sx={{
                             display: "flex",
@@ -76,7 +73,7 @@ const FetchAndParkComponent = () => {
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid item size={2}>
+            <Grid size={2}>
                 <FormControl variant="outlined" sx={{ width: "100%" }}>
                     <InputLabel id="dropdown-label">Options</InputLabel>
                     <Select
@@ -93,7 +90,7 @@ const FetchAndParkComponent = () => {
                     </Select>
                 </FormControl>
             </Grid>
-            <Grid item size={1}>
+            <Grid size={1}>
                 <Button
                     variant="contained"
                     color="primary"
@@ -102,7 +99,7 @@ const FetchAndParkComponent = () => {
                     Fetch
                 </Button>
             </Grid>
-            <Grid item size={1}>
+            <Grid size={1}>
                 <Button
                     variant="contained"
                     color="secondary"
