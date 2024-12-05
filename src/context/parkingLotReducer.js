@@ -1,21 +1,21 @@
-import { ParkingLotsActionTypes } from "../enums/ParkingLotsActionTypes";
+import { ParkingLotActionTypes } from "../enums/ParkingLotActionTypes";
 
-export const initialState = [];
+export const parkingLotInitialState = [];
 
 export const parkingLotReducer = (state, action) => {
     const { type, payload } = action;
 
     switch (type) {
-        case ParkingLotsActionTypes.Set: {
+        case ParkingLotActionTypes.Set: {
             return payload;
         }
-        case ParkingLotsActionTypes.Add: {
+        case ParkingLotActionTypes.Add: {
             return [payload, ...state];
         }
-        case ParkingLotsActionTypes.Remove: {
+        case ParkingLotActionTypes.Remove: {
             return state.filter((todo) => todo.id !== payload);
         }
-        case ParkingLotsActionTypes.Edit: {
+        case ParkingLotActionTypes.Edit: {
             return state.map((todo) => {
                 if (todo.id === payload.id) {
                     todo = payload;

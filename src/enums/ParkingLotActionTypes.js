@@ -1,4 +1,4 @@
-export const ParkingLotsActionTypes = {
+export const ParkingLotActionTypes = {
     Set: "SET",
     Add: "ADD",
     Remove: "REMOVE",

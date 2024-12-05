@@ -1,10 +1,24 @@
 import { Grid2 as Grid } from "@mui/material";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { ParkingLotContext } from "../context/ParkingLotContext";
 import ParkingLot from "./ParkingLot";
+import { getParkingLots } from "../api/parkingLot";
+import { ParkingLotActionTypes } from "../enums/ParkingLotActionTypes";
 
 const ParkingLots = () => {
     const { state, dispatch } = useContext(ParkingLotContext);
+
+    const init = async () => {
+        const parkingLots = await getParkingLots();
+        dispatch({
+            type: ParkingLotActionTypes.Set,
+            payload: parkingLots ?? [],
+        });
+    };
+
+    useEffect(() => {
+        init();
+    }, []);
 
     const parkingLots = state.map((parkingLot) => {
         return (

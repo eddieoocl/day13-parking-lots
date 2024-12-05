@@ -8,12 +8,26 @@ import {
     TextField,
     Typography,
 } from "@mui/material";
-import { useContext, useState } from "react";
-import { ParkingLotContext } from "../context/ParkingLotContext";
+import { useContext, useEffect, useState } from "react";
+import { getParkingBoys } from "../api/parkingBoy";
+import { ParkingBoyContext } from "../context/ParkingBoyContext";
+import { ParkingBoyActionTypes } from "../enums/ParkingBoyActionTypes";
 
 const FetchAndParkComponent = () => {
-    const { state } = useContext(ParkingLotContext);
+    const { state, dispatch } = useContext(ParkingBoyContext);
     const [dropdownValue, setDropdownValue] = useState("");
+
+    const init = async () => {
+        const parkingBoys = await getParkingBoys();
+        dispatch({
+            type: ParkingBoyActionTypes.Set,
+            payload: parkingBoys ?? [],
+        });
+    };
+
+    useEffect(() => {
+        init();
+    }, []);
 
     const handleDropdownChange = (event) => {
         setDropdownValue(event.target.value);
@@ -82,9 +96,9 @@ const FetchAndParkComponent = () => {
                         onChange={handleDropdownChange}
                         label="Options"
                     >
-                        {state.map((parkingLot, i) => (
-                            <MenuItem key={i} value={parkingLot.name}>
-                                {parkingLot.name}
+                        {state.map((parkingBoy, i) => (
+                            <MenuItem key={parkingBoy} value={parkingBoy}>
+                                {parkingBoy}
                             </MenuItem>
                         ))}
                     </Select>
@@ -93,19 +107,19 @@ const FetchAndParkComponent = () => {
             <Grid size={1}>
                 <Button
                     variant="contained"
-                    color="primary"
+                    color="secondary"
                     style={{ margin: "0 10px", width: "100%" }}
                 >
-                    Fetch
+                    Park
                 </Button>
             </Grid>
             <Grid size={1}>
                 <Button
                     variant="contained"
-                    color="secondary"
+                    color="primary"
                     style={{ margin: "0 10px", width: "100%" }}
                 >
-                    Park
+                    Fetch
                 </Button>
             </Grid>
         </Grid>
