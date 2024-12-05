@@ -4,13 +4,16 @@ import { ParkingLotContext } from "../context/ParkingLotContext";
 import ParkingLot from "./ParkingLot";
 import { getParkingLots } from "../api/parkingLot";
 import { ParkingLotActionTypes } from "../enums/ParkingLotActionTypes";
+import { ParkingBoyContext } from "../context/ParkingBoyContext";
 
 const ParkingLots = () => {
-    const { state, dispatch } = useContext(ParkingLotContext);
+    const { state: parkingLotState, dispatch: parkingLotDispatch } =
+        useContext(ParkingLotContext);
+    const { state: parkingBoyState } = useContext(ParkingBoyContext);
 
     const init = async () => {
         const parkingLots = await getParkingLots();
-        dispatch({
+        parkingLotDispatch({
             type: ParkingLotActionTypes.Set,
             payload: parkingLots ?? [],
         });
@@ -18,12 +21,12 @@ const ParkingLots = () => {
 
     useEffect(() => {
         init();
-    }, []);
+    }, [parkingBoyState.latestTicket]);
 
-    const parkingLots = state.map((parkingLot) => {
+    const parkingLots = parkingLotState.map((parkingLot) => {
         return (
             <Grid size={4}>
-                <ParkingLot parkingLot={parkingLot} />
+                <ParkingLot key={parkingLot.name} parkingLot={parkingLot} />
             </Grid>
         );
     });

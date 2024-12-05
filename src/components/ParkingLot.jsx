@@ -6,27 +6,36 @@ const ParkingLot = ({ parkingLot }) => {
 
     return (
         <Paper style={{ padding: "16px" }}>
+            <Typography variant="h6" sx={{ paddingY: "10px" }}>
+                {parkingLot.name}
+            </Typography>
             <Grid container spacing={2}>
                 {Array.from({ length: parkingLot.capacity }).map((_, i) => {
-                    if (positions.includes(i)) {
+                    const position = i + 1;
+                    if (positions.includes(position)) {
                         const ticket = parkingLot.tickets.find(
-                            (ticket) => ticket.position === i
+                            (ticket) => ticket.position === position
                         );
                         return (
                             <Grid
                                 size={4}
-                                sx={{ textAlign: "center", overflow: "clip" }}
+                                key={position}
+                                sx={{
+                                    textAlign: "center",
+                                    overflow: "clip",
+                                }}
                             >
                                 {ticket.car.plateNumber}
                             </Grid>
                         );
                     }
-                    return <Grid size={4}>{i}</Grid>;
+                    return (
+                        <Grid key={position} size={4}>
+                            {position}
+                        </Grid>
+                    );
                 })}
             </Grid>
-            <Typography variant="h6" sx={{ paddingY: "10px" }}>
-                {parkingLot.name}
-            </Typography>
         </Paper>
     );
 };

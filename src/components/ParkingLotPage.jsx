@@ -1,12 +1,10 @@
 import { useReducer } from "react";
 import FetchAndParkComponent from "./FetchAndParkComponent";
-import {
-    parkingLotInitialState,
-    parkingLotReducer,
-} from "../context/parkingLotReducer";
+import { parkingLotInitialState, parkingLotReducer } from "../context/parkingLotReducer";
 import { ParkingLotContext } from "../context/ParkingLotContext";
 import ParkingLots from "./ParkingLots";
 import { ParkingBoyContext } from "../context/ParkingBoyContext";
+import { parkingBoyInitialState, parkingBoyReducer } from "../context/parkingBoyReducer";
 
 function ParkingLotPage() {
     const [parkingLotState, parkingLotDispatch] = useReducer(
@@ -14,8 +12,8 @@ function ParkingLotPage() {
         parkingLotInitialState
     );
     const [parkingBoyState, parkingBoyDispatch] = useReducer(
-        parkingLotReducer,
-        parkingLotInitialState
+        parkingBoyReducer,
+        parkingBoyInitialState
     );
 
     return (

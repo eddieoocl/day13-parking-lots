@@ -1,3 +1,4 @@
 export const ParkingBoyActionTypes = {
-    Set: "SET",
+    SetParkingBoy: "SET_PARKING_BOY",
+    SetLatestTicket: "SET_LATEST_TICKET",
 };

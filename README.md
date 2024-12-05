@@ -13,3 +13,7 @@
 ## Context and Reducer
 
 -   Following the structure of parkingLotReducer.js and ParkingLotContext.js, Help me write a reducer and context for parking boy. Create a ParkingBoyActionTypes that is similar to ParkingLotActionTypes.js. There is currently only have set action.
+
+## Error Checking
+
+-   How to use regex to check if a string in JavaScript follow this format standard: two letters + four digits (e.g., “AB-1234”)?

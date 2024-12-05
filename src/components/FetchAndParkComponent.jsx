@@ -15,14 +15,19 @@ import { ParkingBoyContext } from "../context/ParkingBoyContext";
 import { ParkingBoyActionTypes } from "../enums/ParkingBoyActionTypes";
 
 const FetchAndParkComponent = () => {
-    const { state, dispatch } = useContext(ParkingBoyContext);
+    const {
+        state: { parkingBoys },
+        dispatch,
+    } = useContext(ParkingBoyContext);
     const [plateNumber, setPlateNumber] = useState("");
     const [strategy, setStrategy] = useState("");
+    const [plateNumberError, setPlateNumberError] = useState(false);
 
     const init = async () => {
         const parkingBoys = await getParkingBoys();
+        setStrategy(parkingBoys[0]);
         dispatch({
-            type: ParkingBoyActionTypes.Set,
+            type: ParkingBoyActionTypes.SetParkingBoy,
             payload: parkingBoys ?? [],
         });
     };
@@ -37,12 +42,28 @@ const FetchAndParkComponent = () => {
 
     const handlePark = async (event) => {
         event.preventDefault();
+        if (plateNumberError) {
+            return;
+        }
         const ticket = await park({ strategy, plateNumber });
+        dispatch({
+            type: ParkingBoyActionTypes.SetLatestTicket,
+            payload: ticket,
+        });
     };
 
     const handleFetch = async (event) => {
         event.preventDefault();
+        if (plateNumberError) {
+            return;
+        }
         const car = await fetch({ plateNumber });
+    };
+
+    const checkPlateNumberFormat = (event) => {
+        event.preventDefault();
+        const plateNumberRegex = /^[A-Z]{2}-\d{4}$/;
+        setPlateNumberError(!plateNumberRegex.test(event.target.value));
     };
 
     return (
@@ -51,7 +72,8 @@ const FetchAndParkComponent = () => {
                 container
                 spacing={1}
                 sx={{
-                    marginTop: "20px",
+                    marginY: "20px",
+                    paddingY: "20px",
                     alignItems: "center",
                     justifyContent: "center",
                     flexWrap: "wrap",
@@ -96,7 +118,14 @@ const FetchAndParkComponent = () => {
                                 variant="outlined"
                                 value={plateNumber}
                                 onChange={(e) => setPlateNumber(e.target.value)}
+                                onBlur={checkPlateNumberFormat}
                                 sx={{ width: "100%" }}
+                                error={plateNumberError}
+                                helperText={
+                                    plateNumberError
+                                        ? "Plate number should follow the following format: AB-1234"
+                                        : ""
+                                }
                             />
                         </Grid>
                     </Grid>
@@ -110,7 +139,7 @@ const FetchAndParkComponent = () => {
                             onChange={handleDropdownChange}
                             label="Strategy"
                         >
-                            {state.map((parkingBoy, i) => (
+                            {parkingBoys?.map((parkingBoy, i) => (
                                 <MenuItem key={parkingBoy} value={parkingBoy}>
                                     {parkingBoy}
                                 </MenuItem>
