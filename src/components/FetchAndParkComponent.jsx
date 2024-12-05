@@ -1,4 +1,5 @@
 import {
+    Box,
     Button,
     FormControl,
     Grid2 as Grid,
@@ -9,13 +10,14 @@ import {
     Typography,
 } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
-import { getParkingBoys } from "../api/parkingBoy";
+import { fetch, getParkingBoys, park } from "../api/parkingBoy";
 import { ParkingBoyContext } from "../context/ParkingBoyContext";
 import { ParkingBoyActionTypes } from "../enums/ParkingBoyActionTypes";
 
 const FetchAndParkComponent = () => {
     const { state, dispatch } = useContext(ParkingBoyContext);
-    const [dropdownValue, setDropdownValue] = useState("");
+    const [plateNumber, setPlateNumber] = useState("");
+    const [strategy, setStrategy] = useState("");
 
     const init = async () => {
         const parkingBoys = await getParkingBoys();
@@ -30,99 +32,116 @@ const FetchAndParkComponent = () => {
     }, []);
 
     const handleDropdownChange = (event) => {
-        setDropdownValue(event.target.value);
+        setStrategy(event.target.value);
+    };
+
+    const handlePark = async (event) => {
+        event.preventDefault();
+        const ticket = await park({ strategy, plateNumber });
+    };
+
+    const handleFetch = async (event) => {
+        event.preventDefault();
+        const car = await fetch({ plateNumber });
     };
 
     return (
-        <Grid
-            container
-            spacing={1}
-            sx={{
-                marginTop: "20px",
-                alignItems: "center",
-                justifyContent: "center",
-                flexWrap: "wrap",
-            }}
-        >
+        <Box component="form">
             <Grid
-                size={6}
+                container
+                spacing={1}
                 sx={{
-                    display: "flex",
-                    flexDirection: "row",
+                    marginTop: "20px",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexWrap: "wrap",
                 }}
             >
                 <Grid
-                    container
-                    spacing={0}
+                    size={6}
                     sx={{
-                        alignItems: "center",
-                        justifyContent: "center",
-                        flexWrap: "wrap",
-                        width: "100%",
+                        display: "flex",
+                        flexDirection: "row",
                     }}
                 >
                     <Grid
-                        size={2}
+                        container
+                        spacing={0}
                         sx={{
-                            paddingRight: "10px",
-                            display: "flex",
-                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            flexWrap: "wrap",
+                            width: "100%",
                         }}
                     >
-                        <Typography>Plate Number</Typography>
-                    </Grid>
-                    <Grid
-                        size={10}
-                        sx={{
-                            display: "flex",
-                            flexDirection: "row",
-                        }}
-                    >
-                        <TextField
-                            label="Plate Number"
-                            v
-                            ariant="outlined"
-                            sx={{ width: "100%" }}
-                        />
+                        <Grid
+                            size={2}
+                            sx={{
+                                paddingRight: "10px",
+                                display: "flex",
+                                flexDirection: "row",
+                            }}
+                        >
+                            <Typography>Plate Number</Typography>
+                        </Grid>
+                        <Grid
+                            size={10}
+                            sx={{
+                                display: "flex",
+                                flexDirection: "row",
+                            }}
+                        >
+                            <TextField
+                                label="Plate Number"
+                                variant="outlined"
+                                value={plateNumber}
+                                onChange={(e) => setPlateNumber(e.target.value)}
+                                sx={{ width: "100%" }}
+                            />
+                        </Grid>
                     </Grid>
                 </Grid>
-            </Grid>
-            <Grid size={2}>
-                <FormControl variant="outlined" sx={{ width: "100%" }}>
-                    <InputLabel id="dropdown-label">Options</InputLabel>
-                    <Select
-                        labelId="dropdown-label"
-                        value={dropdownValue}
-                        onChange={handleDropdownChange}
-                        label="Options"
+                <Grid size={2}>
+                    <FormControl variant="outlined" sx={{ width: "100%" }}>
+                        <InputLabel id="dropdown-label">Options</InputLabel>
+                        <Select
+                            labelId="dropdown-label"
+                            value={strategy}
+                            onChange={handleDropdownChange}
+                            label="Strategy"
+                        >
+                            {state.map((parkingBoy, i) => (
+                                <MenuItem key={parkingBoy} value={parkingBoy}>
+                                    {parkingBoy}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <Grid size={1}>
+                    <Button
+                        type="button"
+                        variant="contained"
+                        color="secondary"
+                        style={{ margin: "0 10px", width: "100%" }}
+                        onClick={handlePark}
                     >
-                        {state.map((parkingBoy, i) => (
-                            <MenuItem key={parkingBoy} value={parkingBoy}>
-                                {parkingBoy}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
+                        Park
+                    </Button>
+                </Grid>
+                <Grid size={1}>
+                    <Button
+                        type="button"
+                        variant="contained"
+                        color="primary"
+                        style={{ margin: "0 10px", width: "100%" }}
+                        onClick={handleFetch}
+                    >
+                        Fetch
+                    </Button>
+                </Grid>
             </Grid>
-            <Grid size={1}>
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    style={{ margin: "0 10px", width: "100%" }}
-                >
-                    Park
-                </Button>
-            </Grid>
-            <Grid size={1}>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    style={{ margin: "0 10px", width: "100%" }}
-                >
-                    Fetch
-                </Button>
-            </Grid>
-        </Grid>
+        </Box>
     );
 };
 
