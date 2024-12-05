@@ -17,3 +17,4 @@
 ## Error Checking
 
 -   How to use regex to check if a string in JavaScript follow this format standard: two letters + four digits (e.g., “AB-1234”)?
+-   How do you use Alert to display error in MUI?

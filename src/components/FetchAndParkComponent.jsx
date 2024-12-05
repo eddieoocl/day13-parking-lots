@@ -1,4 +1,5 @@
 import {
+    Alert,
     Box,
     Button,
     FormControl,
@@ -22,6 +23,7 @@ const FetchAndParkComponent = () => {
     const [plateNumber, setPlateNumber] = useState("");
     const [strategy, setStrategy] = useState("");
     const [plateNumberError, setPlateNumberError] = useState(false);
+    const [parkErrorMessage, setParkErrorMessage] = useState(null);
 
     const init = async () => {
         const parkingBoys = await getParkingBoys();
@@ -45,11 +47,16 @@ const FetchAndParkComponent = () => {
         if (plateNumberError) {
             return;
         }
-        const ticket = await park({ strategy, plateNumber });
-        dispatch({
-            type: ParkingBoyActionTypes.SetLatestTicket,
-            payload: ticket,
-        });
+        setParkErrorMessage(null);
+        try {
+            const ticket = await park({ strategy, plateNumber });
+            dispatch({
+                type: ParkingBoyActionTypes.SetLatestTicket,
+                payload: ticket,
+            });
+        } catch (e) {
+            setParkErrorMessage("Your car has already been parked.");
+        }
     };
 
     const handleFetch = async (event) => {
@@ -72,13 +79,23 @@ const FetchAndParkComponent = () => {
                 container
                 spacing={1}
                 sx={{
-                    marginY: "20px",
                     paddingY: "20px",
                     alignItems: "center",
                     justifyContent: "center",
                     flexWrap: "wrap",
                 }}
             >
+                {parkErrorMessage && (
+                    <Grid
+                        size={12}
+                        sx={{
+                            marginX: "20px",
+                            marginBottom: "20px",
+                        }}
+                    >
+                        <Alert severity="error">{parkErrorMessage}</Alert>
+                    </Grid>
+                )}
                 <Grid
                     size={6}
                     sx={{

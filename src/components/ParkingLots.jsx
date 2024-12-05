@@ -26,7 +26,7 @@ const ParkingLots = () => {
     const parkingLots = parkingLotState.map((parkingLot) => {
         return (
             <Grid size={4}>
-                <ParkingLot key={parkingLot.name} parkingLot={parkingLot} />
+                <ParkingLot key={parkingLot.id} parkingLot={parkingLot} />
             </Grid>
         );
     });
