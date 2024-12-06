@@ -64,7 +64,16 @@ const FetchAndParkComponent = () => {
         if (plateNumberError) {
             return;
         }
-        const car = await fetch({ plateNumber });
+        setParkErrorMessage(null);
+        try {
+            const car = await fetch({ plateNumber });
+            dispatch({
+                type: ParkingBoyActionTypes.SetLatestCar,
+                payload: car,
+            });
+        } catch (e) {
+            setParkErrorMessage("Your car is not parked anywhere.");
+        }
     };
 
     const checkPlateNumberFormat = (event) => {

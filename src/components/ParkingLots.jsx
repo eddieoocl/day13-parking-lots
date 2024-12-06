@@ -9,7 +9,9 @@ import { ParkingBoyContext } from "../context/ParkingBoyContext";
 const ParkingLots = () => {
     const { state: parkingLotState, dispatch: parkingLotDispatch } =
         useContext(ParkingLotContext);
-    const { state: parkingBoyState } = useContext(ParkingBoyContext);
+    const {
+        state: { latestTicket, latestCar },
+    } = useContext(ParkingBoyContext);
 
     const init = async () => {
         const parkingLots = await getParkingLots();
@@ -21,7 +23,7 @@ const ParkingLots = () => {
 
     useEffect(() => {
         init();
-    }, [parkingBoyState.latestTicket]);
+    }, [latestTicket, latestCar]);
 
     const parkingLots = parkingLotState.map((parkingLot) => {
         return (

@@ -1,6 +1,10 @@
 import { ParkingBoyActionTypes } from "../enums/ParkingBoyActionTypes";
 
-export const parkingBoyInitialState = { parkingBoys: [], latestTicket: null };
+export const parkingBoyInitialState = {
+    parkingBoys: [],
+    latestTicket: null,
+    latestCar: null,
+};
 
 export const parkingBoyReducer = (state, action) => {
     const { type, payload } = action;
@@ -11,6 +15,9 @@ export const parkingBoyReducer = (state, action) => {
         }
         case ParkingBoyActionTypes.SetLatestTicket: {
             return { ...state, latestTicket: payload };
+        }
+        case ParkingBoyActionTypes.SetLatestCar: {
+            return { ...state, latestCar: payload };
         }
         default:
             return state;
